@@ -50,3 +50,7 @@ ios/
 # APK generadas
 *.apk
 *.aab
+# Keystore files - NEVER commit these!
+*.keystore
+*.jks
+release-signing.properties

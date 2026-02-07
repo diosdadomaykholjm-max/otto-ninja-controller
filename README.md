@@ -177,6 +177,44 @@ git push origin master
    - Abre el archivo `.apk`
    - Sigue los pasos de instalación
 
+### ⚠️ Google Play Protect - "App sospechosa"
+
+Si Google Play Protect marca tu APK como amenaza o sospechosa:
+
+**Causa**: Las APKs **debug** no están firmadas con certificado digital.
+
+**Solución 1 - Usar APK Release (Recomendado)**:
+```bash
+# En Windows, ejecuta el script:
+firmar-apk.bat
+
+# O manualmente con Android Studio:
+npx cap open android
+# Build > Generate Signed Bundle / APK > APK > Release
+```
+
+**Solución 2 - Permitir la app temporalmente**:
+1. Instala la APK
+2. Ve a **Configuración > Google > Seguridad**
+3. Busca "Otto Ninja Controller"
+4. Activa "Permitir installation from this source"
+
+**Solución 3 - Whitelist en Google Play Protect**:
+1. Abre Google Play Store
+2. Menú ≡ > Play Protect
+3. Configuración > Protección de amenazas
+4. Desactiva temporalmente
+
+**Nota**: La APK generada por Codemagic ya está **FIRMADA (Release)** por lo que NO debería ser marcada como sospechosa.
+
+2. **Transferir la APK**:
+   - USB: Conecta tu celular y copia la APK
+   - Cloud: Sube la APK a Google Drive/Dropbox
+
+3. **Instalar**:
+   - Abre el archivo `.apk`
+   - Sigue los pasos de instalación
+
 ### Estructura del Proyecto con Capacitor
 
 ```

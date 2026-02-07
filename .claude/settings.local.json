@@ -11,7 +11,10 @@
       "Bash(git push:*)",
       "Bash(npm uninstall:*)",
       "Bash(npx cap sync:*)",
-      "Bash(start npx serve . -l 8000)"
+      "Bash(start npx serve . -l 8000)",
+      "Bash(code:*)",
+      "Bash(npx cap run android:*)",
+      "Bash(keytool:*)"
     ]
   }
 }
