@@ -560,7 +560,7 @@ body {
     gap: 24px;
     width: 100%;
     animation: fadeIn 0.3s var(--transition-normal);
-    align-items: start;
+    align-items: stretch;
     justify-content: center;
 }
 
@@ -576,6 +576,7 @@ body {
     width: 100%;
     max-width: 280px;
     flex-shrink: 0;
+    height: 100%;
 }
 
 /* Right Panel: Mode Toggle + Controls */
@@ -587,6 +588,7 @@ body {
     width: 100%;
     max-width: 280px;
     flex-shrink: 0;
+    height: 100%;
     justify-content: flex-start;
 }
 
@@ -763,7 +765,7 @@ body {
 /* ========== QUICK ATTACKS ========== */
 .quick-attacks-container {
     width: 100%;
-    flex-shrink: 0;
+    flex: 1;
     margin: 0;
     padding: 16px;
     background: var(--bg-main);
@@ -849,7 +851,7 @@ body {
 /* ========== QUICK SOUNDS ========== */
 .quick-sounds-container {
     width: 100%;
-    flex-shrink: 0;
+    flex: 1;
     margin: 0;
     padding: 16px;
     background: var(--bg-main);
