@@ -948,9 +948,9 @@ body {
 
 .d-pad {
     display: grid;
-    grid-template-columns: repeat(3, 90px);
-    grid-template-rows: repeat(3, 90px);
-    gap: 10px;
+    grid-template-columns: repeat(3, 70px);
+    grid-template-rows: repeat(3, 70px);
+    gap: 6px;
     margin-bottom: 20px;
 }
 
