@@ -21,6 +21,7 @@ otto-ninja-controller/
 - **Envío de comandos de modo** - Notifica al ESP32 cuando cambias entre RODAR/CAMINAR
   - `/mode?cmd=rodar` - Activa modo rodaje
   - `/mode?cmd=caminar` - Activa modo caminata
+- **Orientación horizontal** - La app se fuerza en modo landscape para mejor control
 
 ### Diseño Visual
 - ✨ Estética Cyberpunk/Futurista
