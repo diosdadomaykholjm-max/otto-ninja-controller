@@ -29,6 +29,9 @@ workflows:
           # Sincronizar archivos web
           npx cap sync android
 
+          # Dar permisos de ejecución a gradlew
+          chmod +x android/gradlew
+
           # Compilar APK con Gradle
           cd android
           ./gradlew assembleDebug
