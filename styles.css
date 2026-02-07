@@ -550,7 +550,7 @@ body {
 /* Game Mode Sections */
 .game-mode-section {
     display: none;
-    grid-template-columns: 200px 1fr 220px;
+    grid-template-columns: 280px 1fr;
     gap: 20px;
     width: 100%;
     animation: fadeIn 0.3s var(--transition-normal);
@@ -559,6 +559,15 @@ body {
 
 .game-mode-section.active {
     display: grid;
+}
+
+/* Left Panel: Sounds + Attacks */
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 280px;
+    flex-shrink: 0;
 }
 
 .game-controls-container {
@@ -733,7 +742,7 @@ body {
 
 /* ========== QUICK ATTACKS ========== */
 .quick-attacks-container {
-    width: 220px;
+    width: 100%;
     flex-shrink: 0;
     margin: 0;
     padding: 16px;
@@ -819,7 +828,7 @@ body {
 
 /* ========== QUICK SOUNDS ========== */
 .quick-sounds-container {
-    width: 200px;
+    width: 100%;
     flex-shrink: 0;
     margin: 0;
     padding: 16px;
@@ -1593,6 +1602,12 @@ body {
         flex-direction: column;
         align-items: center;
         gap: 16px;
+    }
+
+    .left-panel {
+        width: 100%;
+        max-width: 280px;
+        order: -2;
     }
 
     .quick-sounds-container {
