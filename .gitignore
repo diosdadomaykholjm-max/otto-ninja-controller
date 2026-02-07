@@ -35,3 +35,14 @@ temp/
 dist/
 build/
 out/
+
+# Capacitor
+.capacitor/
+android/
+ios/
+*.keystore
+*.jks
+
+# APK generadas
+*.apk
+*.aab

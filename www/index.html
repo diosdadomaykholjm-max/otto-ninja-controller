@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Otto Robot Controller">
+    <title>Otto Controller</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Drawer Panel -->
+        <nav class="nav-drawer" id="navDrawer">
+            <div class="nav-drawer-overlay" id="navOverlay"></div>
+            <div class="nav-drawer-content">
+                <div class="nav-drawer-header">
+                    <div class="nav-drawer-logo">
+                        <img src="OTTO_NINJA.png" alt="Otto" class="nav-drawer-logo-img">
+                        <span class="nav-drawer-title">Otto Ninja</span>
+                    </div>
+                    <button class="nav-drawer-close" id="navClose">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <div class="nav-drawer-items">
+                    <button class="nav-drawer-item active" data-panel="game-controls">
+                        <div class="nav-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg>
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Controles</span>
+                            <span class="nav-item-desc">Rotar y caminar</span>
+                        </div>
+                    </button>
+                    <button class="nav-drawer-item" data-panel="arms">
+                        <div class="nav-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="5"/><circle cx="16" cy="12" r="5"/><path d="M8 17v5M16 17v5M8 7V2M16 7V2M3 12h18"/></svg>
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Brazos</span>
+                            <span class="nav-item-desc">Extremidades</span>
+                        </div>
+                    </button>
+                    <button class="nav-drawer-item" data-panel="attacks">
+                        <div class="nav-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6-6 6 6M12 3v18"/></svg>
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Ataques</span>
+                            <span class="nav-item-desc">Movimientos de combate</span>
+                        </div>
+                    </button>
+                    <button class="nav-drawer-item" data-panel="buzzer">
+                        <div class="nav-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Sonido</span>
+                            <span class="nav-item-desc">Efectos de audio</span>
+                        </div>
+                    </button>
+                    <button class="nav-drawer-item" data-panel="calibrate">
+                        <div class="nav-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h4"/><path d="M12 14h4"/><path d="M12 8h4"/><path d="M8 20h4"/><path d="M8 14h4"/><path d="M8 8h4"/></svg>
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Calibrar</span>
+                            <span class="nav-item-desc">Ajustes de servo</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-btn" id="menuBtn" title="Menú de control">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    </button>
+                    <div class="header-title-wrapper">
+                        <img src="OTTO_NINJA.png" alt="Otto Ninja" class="robot-logo">
+                        <h1 class="header-title">Otto Ninja Humanoide</h1>
+                    </div>
+                </div>
+                <div class="status-bar">
+                    <div class="ip-input-container">
+                        <input type="text" class="ip-input" id="ipInput" placeholder="192.168.1.XX">
+                        <button class="connect-btn" id="connectBtn">Conectar</button>
+                    </div>
+                    <div class="connection-status">
+                        <div class="status-indicator" id="statusIndicator"></div>
+                        <span id="statusText">Desconectado</span>
+                    </div>
+                    <div class="lab-logo-container">
+                        <img src="logo.png" alt="LABEEII" class="lab-logo">
+                        <span class="lab-name">LABEEII</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Game Controls Panel (Joystick + Walk) -->
+            <div class="content-panel active" id="game-controls">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">🎮 Controles de Movimiento</h2>
+                    </div>
+
+                    <div class="card-content-centered">
+                        <!-- Mode Toggle -->
+                        <div class="mode-toggle-container">
+                            <div class="mode-toggle">
+                                <button class="mode-toggle-btn" data-mode="rotate">
+                                    <span class="mode-icon">🔄</span>
+                                    <span class="mode-text">Rodar</span>
+                                </button>
+                                <button class="mode-toggle-btn active" data-mode="walk">
+                                    <span class="mode-icon">🚶</span>
+                                    <span class="mode-text">Caminar</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Joystick Section -->
+                        <div class="game-mode-section" id="mode-rotate">
+                            <!-- Quick Sounds -->
+                            <div class="quick-sounds-container">
+                                <h4 class="quick-sounds-title">Sonidos</h4>
+                                <div class="quick-sounds-grid" id="quickSoundsRotate">
+                                    <p class="no-sounds-message">Selecciona hasta 4 sonidos</p>
+                                </div>
+                            </div>
+
+                            <div class="joystick-container">
+                                <div class="joystick-wrapper">
+                                    <div class="joystick-base">
+                                        <div class="joystick-grid"></div>
+                                    </div>
+                                    <div class="joystick-knob" id="joystickKnob"></div>
+                                </div>
+                                <div class="stats-display">
+                                    <div class="stat-box">
+                                        <div class="stat-label">X Axis</div>
+                                        <div class="stat-value" id="xValue">0</div>
+                                    </div>
+                                    <div class="stat-box">
+                                        <div class="stat-label">Y Axis</div>
+                                        <div class="stat-value" id="yValue">0</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Attacks -->
+                            <div class="quick-attacks-container">
+                                <h4 class="quick-attacks-title">Ataques</h4>
+                                <div class="quick-attacks-grid" id="quickAttacksRotate">
+                                    <p class="no-attacks-message">Selecciona hasta 4 ataques</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- D-Pad Section -->
+                        <div class="game-mode-section active" id="mode-walk">
+                            <!-- Quick Sounds -->
+                            <div class="quick-sounds-container">
+                                <h4 class="quick-sounds-title">Sonidos</h4>
+                                <div class="quick-sounds-grid" id="quickSoundsWalk">
+                                    <p class="no-sounds-message">Selecciona hasta 4 sonidos</p>
+                                </div>
+                            </div>
+
+                            <div class="walk-controls">
+                                <div class="d-pad">
+                                    <div></div>
+                                    <button class="d-pad-btn" data-action="walk" data-cmd="forward">▲</button>
+                                    <div></div>
+                                    <button class="d-pad-btn" data-action="walk" data-cmd="left">◄</button>
+                                    <div class="d-pad-btn d-pad-center"></div>
+                                    <button class="d-pad-btn" data-action="walk" data-cmd="right">►</button>
+                                    <div></div>
+                                    <button class="d-pad-btn" data-action="walk" data-cmd="backward">▼</button>
+                                    <div></div>
+                                </div>
+                                <button class="arm-btn" style="width: 200px;" data-action="walk" data-cmd="home">🏠 Inicio</button>
+                            </div>
+
+                            <!-- Quick Attacks -->
+                            <div class="quick-attacks-container">
+                                <h4 class="quick-attacks-title">Ataques</h4>
+                                <div class="quick-attacks-grid" id="quickAttacksWalk">
+                                    <p class="no-attacks-message">Selecciona hasta 4 ataques</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arms Panel -->
+            <div class="content-panel" id="arms">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Brazos y Cabeza</h2>
+                    </div>
+                    <div class="arms-container">
+                        <div class="arm-card">
+                            <div class="arm-icon">💪</div>
+                            <button class="arm-btn" data-action="arm" data-cmd="raise_left">↑ Izq</button>
+                            <button class="arm-btn" style="margin-top: 6px;" data-action="arm" data-cmd="lower_left">↓ Izq</button>
+                        </div>
+                        <div class="arm-card">
+                            <div class="arm-icon">🦾</div>
+                            <button class="arm-btn" data-action="arm" data-cmd="raise_right">↑ Der</button>
+                            <button class="arm-btn" style="margin-top: 6px;" data-action="arm" data-cmd="lower_right">↓ Der</button>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px;">
+                        <button class="arm-btn" data-action="head" data-cmd="left">← Izq</button>
+                        <button class="arm-btn" data-action="head" data-cmd="center">● Centro</button>
+                        <button class="arm-btn" data-action="head" data-cmd="right">Der →</button>
+                    </div>
+                    <button class="arm-btn" style="width: 100%;" data-action="arm" data-cmd="wave">👋 Saludo</button>
+                </div>
+            </div>
+
+            <!-- Attacks Panel -->
+            <div class="content-panel" id="attacks">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Ataques</h2>
+                        <div class="attacks-counter">
+                            <span id="attacksCounter">0</span>/4 seleccionados
+                        </div>
+                    </div>
+                    <div class="attacks-grid">
+                        <div class="attack-card" data-action="attack" data-cmd="slash">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-slash">
+                                <label for="attack-slash" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">⚔️</span>
+                            <div class="attack-name">Slash</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="uppercut">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-uppercut">
+                                <label for="attack-uppercut" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">👆</span>
+                            <div class="attack-name">Uppercut</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="spin">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-spin">
+                                <label for="attack-spin" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">🌀</span>
+                            <div class="attack-name">360°</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="stab">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-stab">
+                                <label for="attack-stab" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">🎯</span>
+                            <div class="attack-name">Estocada</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="defense">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-defense">
+                                <label for="attack-defense" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">🛡️</span>
+                            <div class="attack-name">Defensa</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="combo_fury">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-combo_fury">
+                                <label for="attack-combo_fury" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">😡</span>
+                            <div class="attack-name">Furia</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="combo_samurai">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-combo_samurai">
+                                <label for="attack-combo_samurai" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">🏯</span>
+                            <div class="attack-name">Samurai</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="taunt">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-taunt">
+                                <label for="attack-taunt" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">😎</span>
+                            <div class="attack-name">Victoria</div>
+                        </div>
+                        <div class="attack-card ultimate-card" data-action="attack" data-cmd="ultimate">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-ultimate">
+                                <label for="attack-ultimate" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">💫</span>
+                            <div class="attack-name">ULTIMATE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buzzer Panel -->
+            <div class="content-panel" id="buzzer">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Sonidos</h2>
+                        <div class="sounds-counter">
+                            <span id="soundsCounter">0</span>/4 seleccionados
+                        </div>
+                    </div>
+                    <div class="sound-visualizer">
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                    </div>
+                    <div class="buzzer-grid">
+                        <div class="buzzer-card" data-song="0">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-0">
+                                <label for="buzzer-0" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Conectar</span>
+                        </div>
+                        <div class="buzzer-card" data-song="1">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-1">
+                                <label for="buzzer-1" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Desconectar</span>
+                        </div>
+                        <div class="buzzer-card" data-song="2">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-2">
+                                <label for="buzzer-2" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Botón</span>
+                        </div>
+                        <div class="buzzer-card" data-song="3">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-3">
+                                <label for="buzzer-3" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Batalla</span>
+                        </div>
+                        <div class="buzzer-card" data-song="4">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-4">
+                                <label for="buzzer-4" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Furia</span>
+                        </div>
+                        <div class="buzzer-card" data-song="5">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-5">
+                                <label for="buzzer-5" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Ninja</span>
+                        </div>
+                        <div class="buzzer-card" data-song="6">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-6">
+                                <label for="buzzer-6" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Sorpresa</span>
+                        </div>
+                        <div class="buzzer-card" data-song="7">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-7">
+                                <label for="buzzer-7" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">¡Oh!</span>
+                        </div>
+                        <div class="buzzer-card" data-song="8">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-8">
+                                <label for="buzzer-8" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">¡Oh! 2</span>
+                        </div>
+                        <div class="buzzer-card" data-song="9">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-9">
+                                <label for="buzzer-9" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Tierno</span>
+                        </div>
+                        <div class="buzzer-card" data-song="10">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-10">
+                                <label for="buzzer-10" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Durmiendo</span>
+                        </div>
+                        <div class="buzzer-card" data-song="11">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-11">
+                                <label for="buzzer-11" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Feliz</span>
+                        </div>
+                        <div class="buzzer-card" data-song="12">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-12">
+                                <label for="buzzer-12" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Muy Feliz</span>
+                        </div>
+                        <div class="buzzer-card" data-song="13">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-13">
+                                <label for="buzzer-13" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Feliz Corto</span>
+                        </div>
+                        <div class="buzzer-card" data-song="14">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-14">
+                                <label for="buzzer-14" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Triste</span>
+                        </div>
+                        <div class="buzzer-card" data-song="15">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-15">
+                                <label for="buzzer-15" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Confundido</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calibrate Panel -->
+            <div class="content-panel" id="calibrate">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Calibración</h2>
+                    </div>
+                    <div class="calibrate-section">
+                        <div class="slider-container">
+                            <div class="slider-header">
+                                <span class="slider-label">Pierna Izq</span>
+                                <span class="slider-value" id="offsetLeftValue">0°</span>
+                            </div>
+                            <input type="range" class="custom-slider" id="offsetLeft" min="-90" max="90" value="0">
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-header">
+                                <span class="slider-label">Pierna Der</span>
+                                <span class="slider-value" id="offsetRightValue">0°</span>
+                            </div>
+                            <input type="range" class="custom-slider" id="offsetRight" min="-90" max="90" value="0">
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                            <button class="arm-btn" data-action="calibrate" data-cmd="apply-left">Aplicar Izq</button>
+                            <button class="arm-btn" data-action="calibrate" data-cmd="apply-right">Aplicar Der</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px;">
+                            <button class="arm-btn" data-action="calibrate" data-cmd="apply-both">Aplicar Ambos</button>
+                            <button class="arm-btn" data-action="calibrate" data-cmd="reset">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Debug Panel -->
+            <div class="debug-panel" id="debugLog">
+                <div class="debug-header">System Log</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Lógica -->
+    <script src="app.js"></script>
+
+    <!-- Auto-recarga -->
+    <script>
+        // Auto-recargar cuando haya cambios
+        function initAutoReload() {
+            // No recargar en producción si se desea
+            // localStorage.setItem('no-auto-reload', 'true');
+
+            if (localStorage.getItem('no-auto-reload') === 'true') {
+                console.log('Auto-recarga desactivada');
+                return;
+            }
+
+            // Conectar al EventSource del servidor si existe
+            if (window.EventSource) {
+                const es = new EventSource('/es-reload');
+                es.onchange = () => location.reload();
+                console.log('Sistema de hot-reload activado');
+            }
+        }
+
+        // Iniciar al cargar
+        initAutoReload();
+    </script>
+</body>
+</html>

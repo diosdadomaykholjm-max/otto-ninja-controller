@@ -16,6 +16,12 @@ otto-ninja-controller/
 
 ## 🚀 Características
 
+### Modo de Operación
+- **CAMINAR por defecto** - Al iniciar, el robot está en modo caminar
+- **Envío de comandos de modo** - Notifica al ESP32 cuando cambias entre RODAR/CAMINAR
+  - `/mode?cmd=rodar` - Activa modo rodaje
+  - `/mode?cmd=caminar` - Activa modo caminata
+
 ### Diseño Visual
 - ✨ Estética Cyberpunk/Futurista
 - 🎨 Paleta: Cyan (#00f5ff), Magenta (#ff00ff), Amarillo (#ffff00)
@@ -101,6 +107,89 @@ Edita `styles.css`:
 - ✅ Firefox 88+
 - ✅ Safari 14+
 - ✅ Móviles (iOS/Android)
+- ✅ **Android APK** - Genera una app nativa con Capacitor
+
+## 📲 Generar APK Android
+
+Este proyecto usa **Capacitor** para generar una APK nativa de Android.
+
+### Opción 1: Compilar Localmente
+
+#### Requisitos Previos
+1. **Android Studio** instalado
+2. **Java JDK 8+**
+3. **Variables de entorno configuradas**:
+   ```bash
+   ANDROID_HOME = C:\Users\TuUsuario\AppData\Local\Android\Sdk
+   ```
+
+#### Pasos para Generar APK
+
+```bash
+# 1. Instalar dependencias
+npm install
+
+# 2. Sincronizar archivos web con Android
+npx cap sync android
+
+# 3. Abrir proyecto en Android Studio
+npx cap open android
+
+# 4. En Android Studio:
+#    - Build > Build Bundle(s) / APK(s) > Build APK(s)
+#    - La APK se genera en: android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+### Opción 2: Compilar con Codemagic (CI/CD)
+
+Este proyecto incluye configuración para **Codemagic**:
+
+```bash
+# 1. Los archivos ya están configurados:
+#    - capacitor.config.json
+#    - codemagic.yaml
+
+# 2. Sube cambios a GitHub:
+git add .
+git commit -m "Add Capacitor and Codemagic config"
+git push origin master
+
+# 3. Ve a https://codemagic.io/
+#    - Conecta tu repositorio de GitHub
+#    - Haz clic en "Check for configuration file"
+#    - Selecciona la app y haz clic en "Start new build"
+
+# 4. La APK se generará automáticamente
+#    - Descarga la APK desde la sección "Artifacts"
+```
+
+### Instalar la APK en tu Dispositivo
+
+1. **Habilitar instalación de fuentes desconocidas**:
+   - Android 8+: Configuración > Seguridad > Instalar apps desconocidas
+
+2. **Transferir la APK**:
+   - USB: Conecta tu celular y copia la APK
+   - Cloud: Sube la APK a Google Drive/Dropbox
+
+3. **Instalar**:
+   - Abre el archivo `.apk`
+   - Sigue los pasos de instalación
+
+### Estructura del Proyecto con Capacitor
+
+```
+otto-ninja-controller/
+├── www/                    # Archivos web (HTML, CSS, JS)
+│   ├── index.html
+│   ├── app.js
+│   ├── styles.css
+│   └── *.png
+├── android/                # Proyecto Android nativo (autogenerado)
+├── capacitor.config.json    # Configuración de Capacitor
+├── codemagic.yaml          # Configuración CI/CD
+└── package.json
+```
 
 ## 🔧 Configuración del ESP32
 

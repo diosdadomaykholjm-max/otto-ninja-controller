@@ -1,0 +1,42 @@
+# Referencia: https://docs.codemagic.io/yaml-basic-configuration/
+
+workflows:
+  default-workflow:
+    name: Otto Ninja Controller Android
+    max_build_duration: 30
+    instance_type: mac_mini
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: master
+          include: true
+          source: true
+      tag_patterns:
+        - pattern: "*"
+          include: true
+    scripts:
+      - name: Build Android APK
+        script: |
+          # Instalar dependencias
+          npm install
+
+          # Agregar plataforma Android si no existe
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
+
+          # Sincronizar archivos web
+          npx cap sync android
+
+          # Compilar APK con Gradle
+          cd android
+          ./gradlew assembleDebug
+
+    artifacts:
+      - android/app/build/outputs/apk/debug/app-debug.apk
+
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
