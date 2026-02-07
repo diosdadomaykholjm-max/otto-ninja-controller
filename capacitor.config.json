@@ -1,0 +1,11 @@
+{
+  "appId": "com.ott.ninja.controller",
+  "appName": "Otto Ninja Controller",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "http"
+  },
+  "android": {
+    "orientation": "landscape"
+  }
+}

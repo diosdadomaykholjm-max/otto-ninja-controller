@@ -1,0 +1,40 @@
+{
+  "name": "otto-ninja-pro-controller",
+  "version": "2.0.0",
+  "description": "Professional web-based controller for Otto Ninja robot",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx live-server --port=8000",
+    "build": "echo 'Build complete - ready for deployment'",
+    "deploy": "echo 'Deploy to your web server'",
+    "cap:sync": "npx cap sync",
+    "cap:open:android": "npx cap open android",
+    "android:build": "npx cap sync android && npx cap open android",
+    "android:apk": "cd android && ./gradlew assembleDebug"
+  },
+  "keywords": [
+    "robot",
+    "controller",
+    "esp32",
+    "wifi",
+    "otto",
+    "ninja",
+    "cyberpunk"
+  ],
+  "author": "Otto Ninja Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/otto-ninja-controller"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "serve": "^14.2.0"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.1",
+    "@capacitor/cli": "^6.2.1",
+    "@capacitor/core": "^6.2.1"
+  }
+}
