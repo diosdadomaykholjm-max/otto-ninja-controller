@@ -15,10 +15,6 @@ workflows:
       tag_patterns:
         - pattern: "*"
           include: true
-    environment:
-      vars:
-        JAVA_HOME: /opt/homebrew/opt/openjdk@17
-      xcode: latest
     scripts:
       - name: Build Android APK
         script: |
