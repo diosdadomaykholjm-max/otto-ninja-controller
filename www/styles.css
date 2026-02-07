@@ -1059,7 +1059,7 @@ body {
 .attacks-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 16px;
+    gap: 12px;
 }
 
 .attacks-counter {
@@ -1078,7 +1078,7 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 20px 16px 16px;
+    padding: 12px 12px 10px;
     text-align: center;
     cursor: pointer;
     transition: all var(--transition-normal);
@@ -1199,8 +1199,8 @@ body {
 .buzzer-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 10px;
+    margin-bottom: 12px;
 }
 
 .sounds-counter {
@@ -1219,7 +1219,7 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 16px 12px;
+    padding: 10px 10px 8px;
     text-align: center;
     cursor: pointer;
     transition: all var(--transition-normal);
