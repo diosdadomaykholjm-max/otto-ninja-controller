@@ -452,8 +452,8 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 16px;
-    margin-bottom: 12px;
+    padding: 12px;
+    margin-bottom: 8px;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -477,21 +477,27 @@ body {
 .card-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
+    justify-content: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
     border-bottom: 1px solid var(--divider);
     width: 100%;
     max-width: 500px;
     align-self: center;
 }
 
+.card-header:has(.attacks-counter),
+.card-header:has(.sounds-counter) {
+    justify-content: space-between;
+}
+
 .card-title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--text-primary);
     letter-spacing: -0.02em;
     line-height: 1.2;
+    text-align: center;
 }
 
 /* ========== GAME CONTROLS PANEL (Joystick + Walk) ========== */
@@ -509,15 +515,15 @@ body {
     background: var(--bg-main);
     border-radius: var(--radius-lg);
     padding: 4px;
-    gap: 4px;
+    gap: 2px;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .mode-toggle-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
+    gap: 6px;
+    padding: 12px 16px;
     border: none;
     background: transparent;
     border-radius: var(--radius-md);
@@ -550,15 +556,40 @@ body {
 /* Game Mode Sections */
 .game-mode-section {
     display: none;
-    grid-template-columns: 200px 1fr 220px;
-    gap: 20px;
+    grid-template-columns: 260px 260px;
+    gap: 16px;
     width: 100%;
     animation: fadeIn 0.3s var(--transition-normal);
-    align-items: start;
+    align-items: stretch;
+    justify-content: center;
 }
 
 .game-mode-section.active {
     display: grid;
+}
+
+/* Left Panel: Sounds + Attacks */
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 260px;
+    flex-shrink: 0;
+    height: 100%;
+}
+
+/* Right Panel: Mode Toggle + Controls */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 260px;
+    flex-shrink: 0;
+    height: 100%;
+    justify-content: flex-start;
 }
 
 .game-controls-container {
@@ -596,8 +627,8 @@ body {
 
 .joystick-wrapper {
     position: relative;
-    width: 220px;
-    height: 220px;
+    width: 180px;
+    height: 180px;
     flex-shrink: 0;
 }
 
@@ -694,18 +725,22 @@ body {
 .stats-display {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    width: 100%;
-    max-width: 280px;
+    gap: 8px;
+    width: 180px;
 }
 
 .stat-box {
     background: var(--bg-main);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 16px 12px;
+    padding: 10px 8px;
     text-align: center;
     transition: all var(--transition-fast);
+    min-height: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .stat-box:hover {
@@ -714,41 +749,41 @@ body {
 }
 
 .stat-label {
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 600;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .stat-value {
-    font-size: 36px;
+    font-size: 24px;
     font-weight: 700;
     color: var(--primary);
     font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
     letter-spacing: -0.02em;
-    line-height: 1.1;
+    line-height: 1;
 }
 
 /* ========== QUICK ATTACKS ========== */
 .quick-attacks-container {
-    width: 220px;
-    flex-shrink: 0;
+    width: 100%;
+    flex: 1;
     margin: 0;
-    padding: 16px;
+    padding: 12px;
     background: var(--bg-main);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
 }
 
 .quick-attacks-title {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin: 0 0 12px 0;
+    margin: 0 0 8px 0;
     text-align: center;
 }
 
@@ -819,22 +854,22 @@ body {
 
 /* ========== QUICK SOUNDS ========== */
 .quick-sounds-container {
-    width: 200px;
-    flex-shrink: 0;
+    width: 100%;
+    flex: 1;
     margin: 0;
-    padding: 16px;
+    padding: 12px;
     background: var(--bg-main);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
 }
 
 .quick-sounds-title {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin: 0 0 12px 0;
+    margin: 0 0 8px 0;
     text-align: center;
 }
 
@@ -913,9 +948,9 @@ body {
 
 .d-pad {
     display: grid;
-    grid-template-columns: repeat(3, 90px);
-    grid-template-rows: repeat(3, 90px);
-    gap: 10px;
+    grid-template-columns: repeat(3, 70px);
+    grid-template-rows: repeat(3, 70px);
+    gap: 6px;
     margin-bottom: 20px;
 }
 
@@ -1593,6 +1628,17 @@ body {
         flex-direction: column;
         align-items: center;
         gap: 16px;
+    }
+
+    .left-panel {
+        width: 100%;
+        max-width: 280px;
+        order: -2;
+    }
+
+    .right-panel {
+        width: 100%;
+        order: -1;
     }
 
     .quick-sounds-container {
