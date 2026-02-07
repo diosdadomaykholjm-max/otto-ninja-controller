@@ -771,27 +771,27 @@ body {
     width: 100%;
     flex: 1;
     margin: 0;
-    padding: 12px;
+    padding: 8px;
     background: var(--bg-main);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
 }
 
 .quick-attacks-title {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin: 0 0 8px 0;
+    margin: 0 0 4px 0;
     text-align: center;
 }
 
 .quick-attacks-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    min-height: 80px;
+    gap: 6px;
+    min-height: 50px;
 }
 
 .quick-attack-btn {
@@ -857,27 +857,27 @@ body {
     width: 100%;
     flex: 1;
     margin: 0;
-    padding: 12px;
+    padding: 8px;
     background: var(--bg-main);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
 }
 
 .quick-sounds-title {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin: 0 0 8px 0;
+    margin: 0 0 4px 0;
     text-align: center;
 }
 
 .quick-sounds-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    min-height: 80px;
+    gap: 6px;
+    min-height: 50px;
 }
 
 .quick-sound-btn {
