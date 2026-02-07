@@ -32,25 +32,12 @@ workflows:
           # Dar permisos de ejecución a gradlew
           chmod +x android/gradlew
 
-          # Generar keystore para firmar la APK
-          if [ ! -f "android/otto-ninja-release.keystore" ]; then
-            keytool -genkey -v \
-              -keystore android/otto-ninja-release.keystore \
-              -alias otto-ninja \
-              -keyalg RSA \
-              -keysize 2048 \
-              -validity 10000 \
-              -storepass otto123456 \
-              -keypass otto123456 \
-              -dname "CN=Otto Ninja, OU=LABEEII, O=LABEEII, L=City, ST=State, C=US"
-          fi
-
-          # Compilar APK Release firmada
+          # Compilar APK con Gradle
           cd android
-          ./gradlew assembleRelease
+          ./gradlew assembleDebug
 
     artifacts:
-      - android/app/build/outputs/apk/release/app-release.apk
+      - android/app/build/outputs/apk/debug/app-debug.apk
 
     publishing:
       email:

@@ -551,10 +551,11 @@ body {
 .game-mode-section {
     display: none;
     grid-template-columns: 280px 1fr;
-    gap: 20px;
+    gap: 24px;
     width: 100%;
     animation: fadeIn 0.3s var(--transition-normal);
     align-items: start;
+    justify-content: center;
 }
 
 .game-mode-section.active {
@@ -566,7 +567,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    width: 280px;
+    width: 100%;
+    max-width: 280px;
     flex-shrink: 0;
 }
 
@@ -577,6 +579,7 @@ body {
     align-items: center;
     gap: 20px;
     width: 100%;
+    justify-content: flex-start;
 }
 
 .game-controls-container {
