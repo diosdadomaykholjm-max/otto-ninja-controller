@@ -234,8 +234,10 @@ body {
 /* ========== MAIN CONTENT ========== */
 .main-content {
     padding: 16px 24px;
-    overflow-y: auto;
+    overflow: hidden;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
     max-width: 100%;
     margin: 0;
 }
@@ -424,10 +426,14 @@ body {
 .content-panel {
     display: none;
     animation: fadeIn 0.4s var(--transition-normal);
+    flex: 1;
+    overflow: hidden;
+    height: 100%;
 }
 
 .content-panel.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
 }
 
 @keyframes fadeIn {
@@ -446,8 +452,13 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 20px;
-    margin-bottom: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: calc(100vh - 120px); /* Ajustar para que quepa en pantalla */
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
 }
@@ -1736,3 +1747,105 @@ body {
         --border: rgba(255, 255, 255, 0.1);
     }
 }
+
+/* ========== LANDSCAPE ORIENTATION (No Scroll) ========== */
+@media (orientation: landscape) {
+    * {
+        scrollbar-width: none; /* Firefox */
+    }
+
+    *::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Edge */
+    }
+
+    html, body {
+        overflow: hidden !important;
+        height: 100vh !important;
+        width: 100vw !important;
+    }
+
+    .app-container {
+        height: 100vh !important;
+        overflow: hidden !important;
+    }
+
+    .main-content {
+        height: 100vh !important;
+        padding: 8px 16px !important;
+        overflow: hidden !important;
+    }
+
+    .header {
+        padding: 8px 12px !important;
+        min-height: 50px !important;
+    }
+
+    .header-title {
+        font-size: 14px !important;
+    }
+
+    .robot-logo {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .card {
+        padding: 10px !important;
+        margin-bottom: 8px !important;
+        max-height: calc(100vh - 90px) !important;
+    }
+
+    .card-title {
+        font-size: 14px !important;
+        margin-bottom: 8px !important;
+    }
+
+    .joystick-container {
+        padding: 8px !important;
+    }
+
+    .mode-toggle-btn {
+        padding: 8px 16px !important;
+        font-size: 12px !important;
+    }
+
+    .quick-sounds-title,
+    .quick-attacks-title {
+        font-size: 11px !important;
+        margin-bottom: 6px !important;
+    }
+
+    .quick-sound-btn,
+    .quick-attack-btn {
+        padding: 6px 10px !important;
+        font-size: 10px !important;
+        min-height: 32px !important;
+    }
+
+    .d-pad-btn {
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 18px !important;
+    }
+
+    .arm-btn {
+        padding: 8px 12px !important;
+        font-size: 11px !important;
+        min-height: 36px !important;
+    }
+
+    .buzzer-card {
+        padding: 6px !important;
+        min-height: 40px !important;
+    }
+
+    .buzzer-name {
+        font-size: 10px !important;
+    }
+
+    .debug-entry {
+        font-size: 10px !important;
+        padding: 3px 6px !important;
+    }
+}
+
