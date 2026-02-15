@@ -572,6 +572,20 @@ body {
     letter-spacing: -0.01em;
 }
 
+.mode-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mode-toggle-btn .mode-icon {
+    color: inherit;
+}
+
+.mode-toggle-btn.active .mode-icon {
+    color: var(--primary);
+}
+
 /* Game Mode Sections */
 .game-mode-section {
     display: none;
@@ -1035,6 +1049,11 @@ body {
     cursor: default;
 }
 
+.d-pad-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
 .d-pad-center:hover {
     background: var(--bg-main);
     border-color: var(--border);
@@ -1072,8 +1091,12 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
     box-shadow: var(--shadow-sm);
+}
+
+.arm-icon svg {
+    width: 32px;
+    height: 32px;
 }
 
 .arm-btn {
