@@ -24,7 +24,8 @@
       "Bash(xcopy:*)",
       "Bash(Copy-Item:*)",
       "Bash(Copy-Item -Path styles.css -Destination www -Force)",
-      "Bash(cmd:*)"
+      "Bash(cmd:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }
