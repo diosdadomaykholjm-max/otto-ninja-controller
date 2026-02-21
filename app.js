@@ -641,7 +641,17 @@ function updateQuickSounds() {
 
     // Create buttons for each selected sound
     state.selectedSounds.forEach(soundId => {
-        const data = soundData[soundId];
+        let data = soundData[soundId];
+
+        // If not in predefined sounds, check custom melodies
+        if (!data && state.customMelodies[soundId]) {
+            const customMelody = state.customMelodies[soundId];
+            data = {
+                icon: '🎵',
+                name: customMelody.name || `Custom ${soundId}`
+            };
+        }
+
         if (!data) return;
 
         // Create button
