@@ -578,6 +578,7 @@ body {
     grid-template-columns: 200px 200px 260px;
     gap: 12px;
     width: 100%;
+    height: 100%;
     animation: fadeIn 0.3s var(--transition-normal);
     align-items: stretch;
     justify-content: center;
@@ -595,6 +596,7 @@ body {
     max-width: 200px;
     flex-shrink: 0;
     height: 100%;
+    overflow: hidden;
 }
 
 /* Center Panel: Attacks */
@@ -605,6 +607,7 @@ body {
     max-width: 200px;
     flex-shrink: 0;
     height: 100%;
+    overflow: hidden;
 }
 
 /* Right Panel: Mode Toggle + Controls */
@@ -618,6 +621,7 @@ body {
     flex-shrink: 0;
     height: 100%;
     justify-content: flex-start;
+    overflow: hidden;
 }
 
 .game-controls-container {
@@ -651,6 +655,9 @@ body {
     justify-content: center;
     gap: 20px;
     width: 100%;
+    touch-action: none; /* Prevenir gestos táctiles del navegador */
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .joystick-wrapper {
@@ -658,6 +665,9 @@ body {
     width: 180px;
     height: 180px;
     flex-shrink: 0;
+    touch-action: none; /* Prevenir scroll en móviles */
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .joystick-base {
@@ -671,6 +681,10 @@ body {
         inset 0 2px 12px rgba(0, 0, 0, 0.04),
         0 4px 24px rgba(0, 0, 0, 0.04);
     cursor: grab;
+    touch-action: none; /* Prevenir gestos del navegador */
+    pointer-events: auto; /* Asegurar captura de eventos pointer */
+    user-select: none; /* Prevenir selección de texto */
+    -webkit-user-select: none;
 }
 
 .joystick-base:active {
@@ -723,6 +737,9 @@ body {
         inset 0 2px 8px rgba(255, 255, 255, 0.8);
     cursor: grab;
     transition: all var(--transition-normal);
+    touch-action: none; /* Permitir arrastre sin interferencia del navegador */
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .joystick-knob:active {
@@ -803,6 +820,7 @@ body {
     background: var(--bg-main);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
+    overflow: hidden;
 }
 
 .quick-attacks-title {
@@ -889,6 +907,7 @@ body {
     background: var(--bg-main);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
+    overflow: hidden;
 }
 
 .quick-sounds-title {
@@ -1053,8 +1072,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
     box-shadow: var(--shadow-sm);
+    font-size: 32px;
 }
 
 .arm-btn {
@@ -1875,6 +1894,7 @@ body {
         padding: 10px !important;
         margin-bottom: 8px !important;
         max-height: calc(100vh - 90px) !important;
+        overflow-y: hidden !important; /* Sin scroll en landscape */
     }
 
     .card-title {
