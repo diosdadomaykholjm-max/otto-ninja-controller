@@ -1061,7 +1061,7 @@ function updateQuickDisplayMessages() {
 
     // If no messages selected, show message
     if (state.selectedDisplayMessages.size === 0) {
-        const message = '<p class="no-display-message">Selecciona hasta 3 mensajes</p>';
+        const message = '<p class="no-display-message">Selecciona hasta 4 mensajes</p>';
         quickDisplayRotate.innerHTML = message;
         quickDisplayWalk.innerHTML = message;
         return;
