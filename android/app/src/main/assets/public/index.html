@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Otto Robot Controller">
+    <meta name="screen-orientation" content="landscape">
+    <title>Otto Controller</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Drawer Panel -->
+        <nav class="nav-drawer" id="navDrawer">
+            <div class="nav-drawer-overlay" id="navOverlay"></div>
+            <div class="nav-drawer-content">
+                <div class="nav-drawer-header">
+                    <div class="nav-drawer-logo">
+                        <img src="OTTO_NINJA.png" alt="Otto" class="nav-drawer-logo-img">
+                        <span class="nav-drawer-title">Otto Ninja</span>
+                    </div>
+                    <button class="nav-drawer-close" id="navClose">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <div class="nav-drawer-items">
+                    <button class="nav-drawer-item active" data-panel="game-controls">
+                        <div class="nav-item-icon" style="background: rgba(142, 142, 147, 0.2) !important; box-shadow: none !important;">
+                            <img src="controles1.png" alt="Controles" style="width: 28px; height: 28px; object-fit: contain;">
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Controles</span>
+                            <span class="nav-item-desc">Rotar y caminar</span>
+                        </div>
+                    </button>
+                    <button class="nav-drawer-item" data-panel="arms">
+                        <div class="nav-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="5"/><circle cx="16" cy="12" r="5"/><path d="M8 17v5M16 17v5M8 7V2M16 7V2M3 12h18"/></svg>
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Brazos</span>
+                            <span class="nav-item-desc">Extremidades</span>
+                        </div>
+                    </button>
+                    <button class="nav-drawer-item" data-panel="attacks">
+                        <div class="nav-item-icon" style="background: rgba(142, 142, 147, 0.2) !important; box-shadow: none !important;">
+                            <img src="ataques.png" alt="Ataques" style="width: 28px; height: 28px; object-fit: contain;">
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Ataques</span>
+                            <span class="nav-item-desc">Movimientos de combate</span>
+                        </div>
+                    </button>
+                    <button class="nav-drawer-item" data-panel="buzzer">
+                        <div class="nav-item-icon" style="background: rgba(142, 142, 147, 0.2) !important; box-shadow: none !important;">
+                            <img src="sonido.png" alt="Sonido" style="width: 28px; height: 28px; object-fit: contain;">
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Sonido</span>
+                            <span class="nav-item-desc">Efectos de audio</span>
+                        </div>
+                    </button>
+                    <button class="nav-drawer-item" data-panel="display">
+                        <div class="nav-item-icon">
+                            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="16" height="11" rx="2"/><path d="M7 17h6"/><path d="M10 14v3"/></svg>
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Display</span>
+                            <span class="nav-item-desc">Mensajes I2C</span>
+                        </div>
+                    </button>
+                    <button class="nav-drawer-item" data-panel="ultrasonic">
+                        <div class="nav-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M6.3 6.3a8 8 0 0 0 0 11.4"/>
+                                <path d="M17.7 6.3a8 8 0 0 1 0 11.4"/>
+                                <path d="M3.5 3.5a13 13 0 0 0 0 17"/>
+                                <path d="M20.5 3.5a13 13 0 0 1 0 17"/>
+                            </svg>
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Sensor</span>
+                            <span class="nav-item-desc">Ultrasonido - Ojos</span>
+                        </div>
+                    </button>
+                    <button class="nav-drawer-item" data-panel="calibrate">
+                        <div class="nav-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h4"/><path d="M12 14h4"/><path d="M12 8h4"/><path d="M8 20h4"/><path d="M8 14h4"/><path d="M8 8h4"/></svg>
+                        </div>
+                        <div class="nav-item-content">
+                            <span class="nav-item-title">Calibrar</span>
+                            <span class="nav-item-desc">Ajustes de servo</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-btn" id="menuBtn" title="Menú de control">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    </button>
+                    <div class="header-title-wrapper">
+                        <img src="OTTO_NINJA.png" alt="Otto Ninja" class="robot-logo">
+                        <h1 class="header-title">Otto Ninja Humanoide</h1>
+                    </div>
+                </div>
+                <div class="status-bar">
+                    <div class="ip-input-container">
+                        <input type="text" class="ip-input" id="ipInput" placeholder="192.168.100.X">
+                        <button class="connect-btn" id="connectBtn">Conectar</button>
+                    </div>
+                    <div class="volume-controls">
+                        <button class="volume-toggle-btn" id="volumeToggleBtn" title="Control de volumen">
+                            <svg class="volume-icon" id="volumeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                                <path class="volume-wave volume-wave-1" d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                <path class="volume-wave volume-wave-2" d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            </svg>
+                        </button>
+                        <div class="volume-panel" id="volumePanel">
+                            <div class="volume-panel-header">
+                                <span>Volumen</span>
+                                <span class="volume-value-display" id="volumeValueDisplay">30</span>
+                                <button class="volume-mute-btn" id="volumeMuteBtn" title="Silenciar">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                                        <line x1="23" y1="9" x2="17" y2="15"></line>
+                                        <line x1="17" y1="9" x2="23" y2="15"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="volume-slider-container">
+                                <button class="volume-btn-small" id="volumeDown">−</button>
+                                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="30">
+                                <button class="volume-btn-small" id="volumeUp">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="connection-status">
+                        <div class="status-indicator" id="statusIndicator"></div>
+                        <span id="statusText">Desconectado</span>
+                    </div>
+                    <div class="lab-logo-container">
+                        <img src="logo.png" alt="LABEEII" class="lab-logo">
+                        <span class="lab-name">LABEEII</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Game Controls Panel (Joystick + Walk) -->
+            <div class="content-panel active" id="game-controls">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title" style="display: flex; align-items: center; justify-content: center; gap: 14px;">
+                            <span style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%); border-radius: 14px; flex-shrink: 0; box-shadow: 0 4px 16px rgba(0, 122, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.2);">
+                                <img src="controles1.png" alt="Controles" style="width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));">
+                            </span>
+                            <span style="color: #FFFFFF; font-weight: 750; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25); letter-spacing: -0.02em;">Controles de Movimiento</span>
+                        </h2>
+                    </div>
+
+                    <div class="card-content-centered">
+                        <!-- Joystick Section -->
+                        <div class="game-mode-section" id="mode-rotate">
+                            <!-- First Column: Display Messages -->
+                            <div class="left-panel-display">
+                                <div class="quick-display-container">
+                                    <h4 class="quick-display-title">Mensajes</h4>
+                                    <div class="quick-display-grid" id="quickDisplayRotate">
+                                        <p class="no-display-message">Selecciona hasta 4 mensajes</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Second Column: Sounds -->
+                            <div class="left-panel-sounds">
+                                <div class="quick-sounds-container">
+                                    <h4 class="quick-sounds-title">Sonidos</h4>
+                                    <div class="quick-sounds-grid" id="quickSoundsRotate">
+                                        <p class="no-sounds-message">Selecciona hasta 4 sonidos</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Third Column: Attacks -->
+                            <div class="center-panel-attacks">
+                                <div class="quick-attacks-container">
+                                    <h4 class="quick-attacks-title">Ataques</h4>
+                                    <div class="quick-attacks-grid" id="quickAttacksRotate">
+                                        <p class="no-attacks-message">Selecciona hasta 4 ataques</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fourth Column: Mode Toggle + Joystick -->
+                            <div class="right-panel">
+                                <div class="mode-toggle-container">
+                                    <div class="mode-toggle">
+                                        <button class="mode-toggle-btn" data-mode="rotate">
+                                            <span class="mode-icon"><img src="rodar.png" alt="Rodar" style="width: 24px; height: 24px; object-fit: contain;"></span>
+                                            <span class="mode-text">Rodar</span>
+                                        </button>
+                                        <button class="mode-toggle-btn active" data-mode="walk">
+                                            <span class="mode-icon">🚶</span>
+                                            <span class="mode-text">Caminar</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="joystick-container">
+                                    <div class="joystick-wrapper">
+                                        <div class="joystick-base">
+                                            <div class="joystick-grid"></div>
+                                        </div>
+                                        <div class="joystick-knob" id="joystickKnob"></div>
+                                    </div>
+                                    <div class="stats-display">
+                                        <div class="stat-box">
+                                            <div class="stat-label">X Axis</div>
+                                            <div class="stat-value" id="xValue">0</div>
+                                        </div>
+                                        <div class="stat-box">
+                                            <div class="stat-label">Y Axis</div>
+                                            <div class="stat-value" id="yValue">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- D-Pad Section -->
+                        <div class="game-mode-section active" id="mode-walk">
+                            <!-- First Column: Display Messages -->
+                            <div class="left-panel-display">
+                                <div class="quick-display-container">
+                                    <h4 class="quick-display-title">Mensajes</h4>
+                                    <div class="quick-display-grid" id="quickDisplayWalk">
+                                        <p class="no-display-message">Selecciona hasta 4 mensajes</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Second Column: Sounds -->
+                            <div class="left-panel-sounds">
+                                <div class="quick-sounds-container">
+                                    <h4 class="quick-sounds-title">Sonidos</h4>
+                                    <div class="quick-sounds-grid" id="quickSoundsWalk">
+                                        <p class="no-sounds-message">Selecciona hasta 4 sonidos</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Third Column: Attacks -->
+                            <div class="center-panel-attacks">
+                                <div class="quick-attacks-container">
+                                    <h4 class="quick-attacks-title">Ataques</h4>
+                                    <div class="quick-attacks-grid" id="quickAttacksWalk">
+                                        <p class="no-attacks-message">Selecciona hasta 4 ataques</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fourth Column: Mode Toggle + D-Pad -->
+                            <div class="right-panel">
+                                <div class="mode-toggle-container">
+                                    <div class="mode-toggle">
+                                        <button class="mode-toggle-btn" data-mode="rotate">
+                                            <span class="mode-icon"><img src="rodar.png" alt="Rodar" style="width: 24px; height: 24px; object-fit: contain;"></span>
+                                            <span class="mode-text">Rodar</span>
+                                        </button>
+                                        <button class="mode-toggle-btn active" data-mode="walk">
+                                            <span class="mode-icon">🚶</span>
+                                            <span class="mode-text">Caminar</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="walk-controls">
+                                    <div class="d-pad">
+                                        <div></div>
+                                        <button class="d-pad-btn" data-action="walk" data-cmd="forward">▲</button>
+                                        <div></div>
+                                        <button class="d-pad-btn" data-action="walk" data-cmd="left">◄</button>
+                                        <div class="d-pad-btn d-pad-center"></div>
+                                        <button class="d-pad-btn" data-action="walk" data-cmd="right">►</button>
+                                        <div></div>
+                                        <button class="d-pad-btn" data-action="walk" data-cmd="backward">▼</button>
+                                        <div></div>
+                                    </div>
+                                    <button class="arm-btn" style="width: 200px;" data-action="walk" data-cmd="home">
+                                        🏠 Inicio
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arms Panel -->
+            <div class="content-panel" id="arms">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Brazos y Cabeza</h2>
+                    </div>
+                    <div class="arms-container">
+                        <div class="arm-card">
+                            <div class="arm-icon">💪</div>
+                            <button class="arm-btn" data-action="arm" data-cmd="raise_left">↑ Izq</button>
+                            <button class="arm-btn" style="margin-top: 6px;" data-action="arm" data-cmd="lower_left">↓ Izq</button>
+                        </div>
+                        <div class="arm-card">
+                            <div class="arm-icon">🦾</div>
+                            <button class="arm-btn" data-action="arm" data-cmd="raise_right">↑ Der</button>
+                            <button class="arm-btn" style="margin-top: 6px;" data-action="arm" data-cmd="lower_right">↓ Der</button>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px;">
+                        <button class="arm-btn" data-action="head" data-cmd="left">← Izq</button>
+                        <button class="arm-btn" data-action="head" data-cmd="center">● Centro</button>
+                        <button class="arm-btn" data-action="head" data-cmd="right">Der →</button>
+                    </div>
+                    <button class="arm-btn" style="width: 100%;" data-action="arm" data-cmd="wave">👋 Saludo</button>
+                </div>
+            </div>
+
+            <!-- Attacks Panel -->
+            <div class="content-panel" id="attacks">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Ataques</h2>
+                        <div class="attacks-counter">
+                            <span id="attacksCounter">0</span>/4 seleccionados
+                        </div>
+                    </div>
+                    <div class="attacks-grid">
+                        <div class="attack-card" data-action="attack" data-cmd="slash">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-slash">
+                                <label for="attack-slash" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">⚔️</span>
+                            <div class="attack-name">Slash</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="uppercut">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-uppercut">
+                                <label for="attack-uppercut" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">👆</span>
+                            <div class="attack-name">Uppercut</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="spin">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-spin">
+                                <label for="attack-spin" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">🌀</span>
+                            <div class="attack-name">360°</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="stab">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-stab">
+                                <label for="attack-stab" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">🎯</span>
+                            <div class="attack-name">Estocada</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="defense">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-defense">
+                                <label for="attack-defense" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">🛡️</span>
+                            <div class="attack-name">Defensa</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="combo_fury">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-combo_fury">
+                                <label for="attack-combo_fury" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">😡</span>
+                            <div class="attack-name">Furia</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="combo_samurai">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-combo_samurai">
+                                <label for="attack-combo_samurai" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">🏯</span>
+                            <div class="attack-name">Samurai</div>
+                        </div>
+                        <div class="attack-card" data-action="attack" data-cmd="taunt">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-taunt">
+                                <label for="attack-taunt" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">😎</span>
+                            <div class="attack-name">Victoria</div>
+                        </div>
+                        <div class="attack-card ultimate-card" data-action="attack" data-cmd="ultimate">
+                            <div class="attack-checkbox">
+                                <input type="checkbox" class="attack-checkbox-input" id="attack-ultimate">
+                                <label for="attack-ultimate" class="attack-checkbox-label"></label>
+                            </div>
+                            <span class="attack-icon">💫</span>
+                            <div class="attack-name">ULTIMATE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buzzer Panel -->
+            <div class="content-panel" id="buzzer">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Sonidos</h2>
+                        <div class="sounds-counter">
+                            <span id="soundsCounter">0</span>/4 seleccionados
+                        </div>
+                    </div>
+                    <div class="sound-visualizer">
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                    </div>
+                    <div class="buzzer-grid">
+                        <div class="buzzer-card" data-song="0" title="🔌 S_CONNECTION - Sonido de conexión establecida">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-0">
+                                <label for="buzzer-0" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Conectar</span>
+                        </div>
+                        <div class="buzzer-card" data-song="1" title="🔌 S_DISCONNECTION - Sonido de desconexión">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-1">
+                                <label for="buzzer-1" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Desconectar</span>
+                        </div>
+                        <div class="buzzer-card" data-song="2" title="🔘 S_BUTTON_PUSHED - Sonido de botón presionado">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-2">
+                                <label for="buzzer-2" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Botón</span>
+                        </div>
+                        <div class="buzzer-card" data-song="3" title="⚔️ S_BATTLE - Tema de batalla épica">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-3">
+                                <label for="buzzer-3" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Batalla</span>
+                        </div>
+                        <div class="buzzer-card" data-song="4" title="😡 S_FURIA - Melodía de furia intensa">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-4">
+                                <label for="buzzer-4" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Furia</span>
+                        </div>
+                        <div class="buzzer-card" data-song="5" title="🥷 S_NINJA - Tema ninja misterioso">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-5">
+                                <label for="buzzer-5" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Ninja</span>
+                        </div>
+                        <div class="buzzer-card" data-song="6" title="😲 S_SURPRISE - Sonido de sorpresa">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-6">
+                                <label for="buzzer-6" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Sorpresa</span>
+                        </div>
+                        <div class="buzzer-card" data-song="7" title="😮 S_OHOOH - Exclamación Oh-Oh">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-7">
+                                <label for="buzzer-7" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">¡Oh!</span>
+                        </div>
+                        <div class="buzzer-card" data-song="8" title="😯 S_OHOOH2 - Variación de exclamación">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-8">
+                                <label for="buzzer-8" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">¡Oh! 2</span>
+                        </div>
+                        <div class="buzzer-card" data-song="9" title="🥰 S_CUDDLY - Melodía tierna y dulce">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-9">
+                                <label for="buzzer-9" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Tierno</span>
+                        </div>
+                        <div class="buzzer-card" data-song="10" title="😴 S_SLEEPING - Sonido de dormir">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-10">
+                                <label for="buzzer-10" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Durmiendo</span>
+                        </div>
+                        <div class="buzzer-card" data-song="11" title="😊 S_HAPPY - Melodía alegre">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-11">
+                                <label for="buzzer-11" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Feliz</span>
+                        </div>
+                        <div class="buzzer-card" data-song="12" title="🤩 S_SUPER_HAPPY - Melodía super feliz">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-12">
+                                <label for="buzzer-12" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Muy Feliz</span>
+                        </div>
+                        <div class="buzzer-card" data-song="13" title="😄 S_HAPPY_SHORT - Felicidad breve">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-13">
+                                <label for="buzzer-13" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Feliz Corto</span>
+                        </div>
+                        <div class="buzzer-card" data-song="14" title="😢 S_SAD - Melodía triste">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-14">
+                                <label for="buzzer-14" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Triste</span>
+                        </div>
+                        <div class="buzzer-card" data-song="15" title="🤔 S_CONFUSED - Sonido de confusión">
+                            <div class="buzzer-checkbox">
+                                <input type="checkbox" class="buzzer-checkbox-input" id="buzzer-15">
+                                <label for="buzzer-15" class="buzzer-checkbox-label"></label>
+                            </div>
+                            <span class="buzzer-name">Confundido</span>
+                        </div>
+                    </div>
+
+                    <!-- Custom Melodies Section -->
+                    <div class="midi-section">
+                        <div class="midi-section-header">
+                            <h3 class="midi-section-title">Melodias Personalizadas</h3>
+                            <button class="midi-import-btn" id="midiImportBtn" title="Importar archivo MIDI">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                                Importar MIDI
+                            </button>
+                        </div>
+                        <div class="custom-melodies-grid" id="customMelodiesGrid">
+                            <p class="no-custom-melodies">No hay melodias personalizadas. Importa un archivo MIDI para crear una.</p>
+                        </div>
+                        <!-- Zona de papelera (aparece al arrastrar) -->
+                        <div class="melody-trash-zone" id="melodyTrashZone">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6l-1 14H6L5 6"/>
+                                <path d="M10 11v6M14 11v6"/>
+                                <path d="M9 6V4h6v2"/>
+                            </svg>
+                            <span>Soltar para eliminar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MIDI Import Modal -->
+            <div class="midi-modal-overlay" id="midiModalOverlay">
+                <div class="midi-modal">
+                    <div class="midi-modal-header">
+                        <h3>Importar Melodia MIDI</h3>
+                        <button class="midi-modal-close" id="midiModalClose">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M18 6L6 18M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="midi-modal-body">
+                        <!-- Paso 1: Subir archivo -->
+                        <div class="midi-step" id="midiStep1">
+                            <div class="midi-dropzone" id="midiDropzone">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+                                    <path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/>
+                                </svg>
+                                <p>Arrastra un archivo MIDI aqui</p>
+                                <p class="midi-dropzone-hint">o haz clic para seleccionar</p>
+                                <input type="file" accept=".mid,.midi" id="midiFileInput" hidden>
+                            </div>
+                            <div class="midi-file-info" id="midiFileInfo" style="display:none">
+                                <span class="midi-filename" id="midiFilename"></span>
+                                <span class="midi-bpm" id="midiBpm"></span>
+                            </div>
+                        </div>
+
+                        <!-- Paso 2: Seleccionar pista -->
+                        <div class="midi-step" id="midiStep2" style="display:none">
+                            <label class="midi-label">Seleccionar Pista:</label>
+                            <div class="midi-track-list" id="midiTrackList"></div>
+                        </div>
+
+                        <!-- Paso 3: Editor de Audio Profesional -->
+                        <div class="midi-step" id="midiStep3" style="display:none">
+                            <!-- Nombre y contador compacto -->
+                            <div class="midi-header-info">
+                                <input type="text" class="midi-name-input" id="midiMelodyName"
+                                       placeholder="Mi Melodia" maxlength="20">
+                                <div class="midi-note-badge">
+                                    <span id="midiNoteCount">0</span> notas
+                                </div>
+                            </div>
+
+                            <!-- Editor de Audio -->
+                            <div class="midi-pro-editor">
+                                <!-- Waveform/Nota visualization -->
+                                <div class="midi-waveform-container" id="midiWaveformContainer">
+                                    <canvas id="midiWaveformCanvas"></canvas>
+                                    <!-- Region seleccionada -->
+                                    <div class="midi-selection-region" id="midiSelectionRegion">
+                                        <div class="midi-selection-handle left" id="midiSelHandleLeft"></div>
+                                        <div class="midi-selection-handle right" id="midiSelHandleRight"></div>
+                                    </div>
+                                    <!-- Playhead -->
+                                    <div class="midi-playhead" id="midiPlayhead">
+                                        <div class="midi-playhead-line"></div>
+                                        <div class="midi-playhead-top"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Panel de transporte -->
+                                <div class="midi-transport">
+                                    <div class="midi-transport-left">
+                                        <!-- Ir al inicio (⏮) -->
+                                        <button class="midi-transport-btn" id="midiToStart" title="Ir al inicio">
+                                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                                                <rect x="5" y="5" width="2.5" height="14" rx="1"/>
+                                                <polygon points="19,5 9,12 19,19"/>
+                                            </svg>
+                                        </button>
+                                        <!-- Play / Pause -->
+                                        <button class="midi-transport-btn midi-play-btn" id="midiPreviewBtn" title="Reproducir / Pausar">
+                                            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24" class="play-icon">
+                                                <path d="M8 5v14l11-7z"/>
+                                            </svg>
+                                            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24" class="pause-icon" style="display:none">
+                                                <rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>
+                                            </svg>
+                                        </button>
+                                        <!-- Stop -->
+                                        <button class="midi-transport-btn midi-stop-btn" id="midiStopBtn" title="Detener y volver al inicio">
+                                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                                                <rect x="5" y="5" width="14" height="14" rx="2"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div class="midi-transport-center">
+                                        <div class="midi-time-display-large">
+                                            <span id="midiCurrentTime">00:00.0</span>
+                                            <span class="midi-time-separator">/</span>
+                                            <span id="midiTotalTime" class="midi-time-total">00:00.0</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="midi-transport-right">
+                                        <button class="midi-loop-btn" id="midiLoopBtn" title="Repetir en bucle">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                                                <path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                                            </svg>
+                                        </button>
+                                        <div class="midi-bpm-control">
+                                            <span class="midi-bpm-label">BPM</span>
+                                            <input type="number" class="midi-bpm-input" id="midiBpmInput" value="120" min="40" max="300">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Panel de efectos -->
+                                <div class="midi-effects-panel">
+                                    <!-- Fila superior: Recortar + Reset + hint -->
+                                    <div class="midi-trim-row">
+                                        <button class="midi-trim-btn" id="midiTrimBtn">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+                                                <path d="M20 4L8.12 15.88M14.47 14.48L20 20M14.47 9.52L20 4M8.12 8.12L12 12"/>
+                                            </svg>
+                                            Recortar
+                                        </button>
+                                        <button class="midi-reset-btn" id="midiResetBtn">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                                                <path d="M3 3v5h5"/>
+                                            </svg>
+                                            Reset
+                                        </button>
+                                        <span class="midi-trim-hint">Arrastra los bordes azules para seleccionar</span>
+                                    </div>
+                                    <!-- Fila inferior: Velocidad + Pitch -->
+                                    <div class="midi-sliders-row">
+                                        <div class="midi-slider-item">
+                                            <label class="midi-effect-label">Velocidad</label>
+                                            <div class="midi-effect-slider-row">
+                                                <input type="range" class="midi-effect-slider" id="midiSpeedSlider"
+                                                       min="50" max="200" value="100" step="5">
+                                                <span class="midi-effect-value" id="midiSpeedValue">100%</span>
+                                            </div>
+                                        </div>
+                                        <div class="midi-slider-item">
+                                            <label class="midi-effect-label">Pitch <span class="midi-effect-hint">(preview)</span></label>
+                                            <div class="midi-effect-slider-row">
+                                                <input type="range" class="midi-effect-slider" id="midiPitchSlider"
+                                                       min="-12" max="12" value="0" step="1">
+                                                <span class="midi-effect-value" id="midiPitchValue">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="midi-modal-footer">
+                        <button class="midi-cancel-btn" id="midiCancelBtn">Cancelar</button>
+                        <button class="midi-save-btn-local" id="midiSaveLocalBtn" disabled>Guardar</button>
+                        <button class="midi-save-btn" id="midiSaveBtn" disabled>Guardar y Enviar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Display Panel -->
+            <div class="content-panel" id="display">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Display I2C 0.96"</h2>
+                        <div class="display-counter">
+                            <span id="displayCounter">0</span>/4 seleccionados
+                        </div>
+                    </div>
+
+                    <!-- Predefined Messages -->
+                    <div class="display-section">
+                        <h3 class="display-section-title">📋 Mensajes Predeterminados</h3>
+                        <div class="display-grid">
+                            <div class="display-card" data-action="display" data-msg="HOLA">
+                                <div class="display-checkbox">
+                                    <input type="checkbox" class="display-checkbox-input" id="display-hola">
+                                    <label for="display-hola" class="display-checkbox-label"></label>
+                                </div>
+                                <span class="display-icon">👋</span>
+                                <div class="display-name">HOLA</div>
+                            </div>
+                            <div class="display-card" data-action="display" data-msg="ADIOS">
+                                <div class="display-checkbox">
+                                    <input type="checkbox" class="display-checkbox-input" id="display-adios">
+                                    <label for="display-adios" class="display-checkbox-label"></label>
+                                </div>
+                                <span class="display-icon">👋</span>
+                                <div class="display-name">ADIOS</div>
+                            </div>
+                            <div class="display-card" data-action="display" data-msg="FELIZ">
+                                <div class="display-checkbox">
+                                    <input type="checkbox" class="display-checkbox-input" id="display-feliz">
+                                    <label for="display-feliz" class="display-checkbox-label"></label>
+                                </div>
+                                <span class="display-icon">😊</span>
+                                <div class="display-name">FELIZ</div>
+                            </div>
+                            <div class="display-card" data-action="display" data-msg="TRISTE">
+                                <div class="display-checkbox">
+                                    <input type="checkbox" class="display-checkbox-input" id="display-triste">
+                                    <label for="display-triste" class="display-checkbox-label"></label>
+                                </div>
+                                <span class="display-icon">😢</span>
+                                <div class="display-name">TRISTE</div>
+                            </div>
+                            <div class="display-card" data-action="display" data-msg="ENOJADO">
+                                <div class="display-checkbox">
+                                    <input type="checkbox" class="display-checkbox-input" id="display-enojado">
+                                    <label for="display-enojado" class="display-checkbox-label"></label>
+                                </div>
+                                <span class="display-icon">😡</span>
+                                <div class="display-name">ENOJADO</div>
+                            </div>
+                            <div class="display-card" data-action="display" data-msg="LISTO">
+                                <div class="display-checkbox">
+                                    <input type="checkbox" class="display-checkbox-input" id="display-listo">
+                                    <label for="display-listo" class="display-checkbox-label"></label>
+                                </div>
+                                <span class="display-icon">✅</span>
+                                <div class="display-name">LISTO</div>
+                            </div>
+                            <div class="display-card" data-action="display" data-msg="ESPERA">
+                                <div class="display-checkbox">
+                                    <input type="checkbox" class="display-checkbox-input" id="display-espera">
+                                    <label for="display-espera" class="display-checkbox-label"></label>
+                                </div>
+                                <span class="display-icon">⏳</span>
+                                <div class="display-name">ESPERA</div>
+                            </div>
+                            <div class="display-card" data-action="display" data-msg="ERROR">
+                                <div class="display-checkbox">
+                                    <input type="checkbox" class="display-checkbox-input" id="display-error">
+                                    <label for="display-error" class="display-checkbox-label"></label>
+                                </div>
+                                <span class="display-icon">❌</span>
+                                <div class="display-name">ERROR</div>
+                            </div>
+                            <div class="display-card" data-action="display" data-msg="OK">
+                                <div class="display-checkbox">
+                                    <input type="checkbox" class="display-checkbox-input" id="display-ok">
+                                    <label for="display-ok" class="display-checkbox-label"></label>
+                                </div>
+                                <span class="display-icon">👍</span>
+                                <div class="display-name">OK</div>
+                            </div>
+                            <div class="display-card" data-action="display" data-msg="NINJA">
+                                <div class="display-checkbox">
+                                    <input type="checkbox" class="display-checkbox-input" id="display-ninja">
+                                    <label for="display-ninja" class="display-checkbox-label"></label>
+                                </div>
+                                <span class="display-icon">🥷</span>
+                                <div class="display-name">NINJA</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Custom Messages -->
+                    <div class="display-section" style="margin-top: 24px;">
+                        <h3 class="display-section-title">✏️ Mensajes Personalizados</h3>
+                        <div class="custom-message-creator">
+                            <input type="text" class="custom-message-input" id="customMessageInput" placeholder="Escribe tu mensaje (máx 16 caracteres)" maxlength="16">
+                            <button class="custom-message-add-btn" id="addCustomMessageBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                                Agregar
+                            </button>
+                        </div>
+                        <div class="custom-messages-list" id="customMessagesList">
+                            <p class="no-custom-messages">No hay mensajes personalizados</p>
+                        </div>
+                    </div>
+
+                    <!-- Imagen a Bitmap OLED -->
+                    <div class="display-section" style="margin-top: 24px;">
+                        <h3 class="display-section-title">🖼️ Imagen a Bitmap OLED</h3>
+
+                        <!-- Drop zone -->
+                        <div class="bitmap-dropzone" id="bitmapDropzone">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="36" height="36">
+                                <rect x="3" y="3" width="18" height="14" rx="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                            <p>Arrastrá una imagen PNG / JPG aquí</p>
+                            <p class="bitmap-dropzone-hint">o hacé clic para seleccionar</p>
+                            <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" id="bitmapFileInput" hidden>
+                        </div>
+
+                        <!-- Workspace (hidden until image loaded) -->
+                        <div class="bitmap-workspace" id="bitmapWorkspace" style="display:none">
+
+                            <!-- Título OLED -->
+                            <div class="bitmap-title-row">
+                                <label class="bitmap-title-label">Título (zona amarilla)</label>
+                                <input type="text" id="bitmapTitle" class="bitmap-title-input"
+                                       maxlength="20" placeholder="Otto Ninja" value="Otto Ninja">
+                                <label class="bitmap-title-invert-toggle">
+                                    <input type="checkbox" id="bitmapTitleInvert">
+                                    <span class="bitmap-toggle-track bitmap-toggle-track-gold"><span class="bitmap-toggle-thumb"></span></span>
+                                    <span class="bitmap-title-invert-label">Invertir</span>
+                                </label>
+                            </div>
+
+                            <!-- Previews -->
+                            <div class="bitmap-previews">
+                                <div class="bitmap-preview-block">
+                                    <span class="bitmap-preview-label">Original</span>
+                                    <canvas id="bitmapOriginalCanvas" width="128" height="48" class="bitmap-canvas bitmap-canvas-original"></canvas>
+                                </div>
+                                <div class="bitmap-preview-block">
+                                    <span class="bitmap-preview-label">Preview OLED (128×64)</span>
+                                    <canvas id="bitmapPreviewCanvas" width="128" height="64" class="bitmap-canvas bitmap-canvas-oled"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Controls -->
+                            <div class="bitmap-controls">
+                                <div class="bitmap-control-row">
+                                    <label class="bitmap-control-label">
+                                        Umbral (threshold)
+                                        <span class="bitmap-threshold-value" id="bitmapThresholdValue">128</span>
+                                    </label>
+                                    <input type="range" class="bitmap-slider" id="bitmapThreshold" min="0" max="255" value="128">
+                                </div>
+
+                                <div class="bitmap-control-row">
+                                    <label class="bitmap-control-label">Inversión</label>
+                                    <label class="bitmap-invert-toggle">
+                                        <input type="checkbox" id="bitmapInvert">
+                                        <span class="bitmap-toggle-track"><span class="bitmap-toggle-thumb"></span></span>
+                                        <span>Invertir colores</span>
+                                    </label>
+                                </div>
+
+                                <div class="bitmap-control-row">
+                                    <label class="bitmap-control-label">Escala</label>
+                                    <div class="bitmap-scale-btns">
+                                        <button class="bitmap-scale-btn active" data-scale="fit">Ajustar</button>
+                                        <button class="bitmap-scale-btn" data-scale="fill">Rellenar</button>
+                                        <button class="bitmap-scale-btn" data-scale="stretch">Estirar</button>
+                                    </div>
+                                </div>
+
+                                <div class="bitmap-control-row">
+                                    <label class="bitmap-control-label">Rotación</label>
+                                    <div class="bitmap-rotate-btns">
+                                        <button class="bitmap-rotate-btn active" data-rotation="0">0°</button>
+                                        <button class="bitmap-rotate-btn" data-rotation="90">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                                            90°
+                                        </button>
+                                        <button class="bitmap-rotate-btn" data-rotation="180">180°</button>
+                                        <button class="bitmap-rotate-btn" data-rotation="270">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                                            270°
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="bitmap-actions">
+                                    <button class="bitmap-btn-secondary" id="bitmapCopyCode">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                        Copiar código C
+                                    </button>
+                                    <button class="bitmap-btn-primary" id="bitmapSendBtn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                        Enviar al robot
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- C code output -->
+                        <div class="bitmap-code-section" id="bitmapCodeSection" style="display:none">
+                            <div class="bitmap-code-header">
+                                <span class="bitmap-code-label">Código C para Arduino</span>
+                                <span class="bitmap-code-size" id="bitmapCodeSize">1024 bytes</span>
+                            </div>
+                            <pre class="bitmap-code-output" id="bitmapCodeOutput"></pre>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Ultrasonic Sensor Panel -->
+            <div class="content-panel" id="ultrasonic">
+                <div class="card">
+                    <div class="card-header us-card-header">
+                        <h2 class="card-title">Sensor Ultrasonido</h2>
+                        <label class="us-master-toggle" title="Activar detección de obstáculos">
+                            <input type="checkbox" id="usEnabled">
+                            <span class="us-toggle-track">
+                                <span class="us-toggle-thumb"></span>
+                            </span>
+                            <span class="us-toggle-label" id="usEnabledLabel">Inactivo</span>
+                        </label>
+                    </div>
+
+                    <!-- Lectura en vivo -->
+                    <div class="us-live-section">
+                        <div class="us-sensor-img-wrap" id="usSensorImgWrap">
+                            <img src="sensor1.png" alt="Sensor Ultrasonido" class="us-sensor-img" id="usSensorImg">
+                        </div>
+                        <div class="us-reading-display">
+                            <span class="us-distance-value" id="usDistanceValue">--</span>
+                            <span class="us-distance-unit">cm</span>
+                        </div>
+                        <div class="us-distance-bar-wrap">
+                            <div class="us-distance-bar" id="usDistanceBar">
+                                <div class="us-bar-fill" id="usBarFill"></div>
+                                <div class="us-bar-marker alert" id="usBarAlert"></div>
+                                <div class="us-bar-marker danger" id="usBarDanger"></div>
+                            </div>
+                            <div class="us-bar-labels">
+                                <span>0</span>
+                                <span>50</span>
+                                <span>100</span>
+                                <span>150 cm</span>
+                            </div>
+                        </div>
+                        <div class="us-status-badge" id="usStatusBadge">Sin lectura</div>
+                        <div class="us-live-indicator" id="usLiveIndicator">
+                            <span class="us-live-dot" id="usLiveDot"></span>
+                            <span class="us-live-label" id="usLiveLabel">Conectando...</span>
+                        </div>
+                    </div>
+
+                    <!-- Zonas de detección -->
+                    <div class="us-config-section">
+                        <h3 class="us-section-title">Zonas de detección</h3>
+                        <div class="us-zone-row">
+                            <div class="us-zone-dot" style="background:#ff3b30"></div>
+                            <span class="us-zone-name">Peligro</span>
+                            <input type="range" class="us-slider" id="usDangerSlider" min="5" max="50" value="15">
+                            <span class="us-zone-value" id="usDangerValue">15 cm</span>
+                        </div>
+                        <div class="us-zone-row">
+                            <div class="us-zone-dot" style="background:#ff9f0a"></div>
+                            <span class="us-zone-name">Alerta</span>
+                            <input type="range" class="us-slider" id="usAlertSlider" min="20" max="120" value="40">
+                            <span class="us-zone-value" id="usAlertValue">40 cm</span>
+                        </div>
+                    </div>
+
+                    <!-- Reacción -->
+                    <div class="us-config-section">
+                        <h3 class="us-section-title">Reacción al detectar obstáculo</h3>
+                        <div class="us-reaction-grid">
+                            <button class="us-reaction-btn active" data-reaction="stop">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+                                Detener
+                            </button>
+                            <button class="us-reaction-btn" data-reaction="back">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+                                Retroceder
+                            </button>
+                            <button class="us-reaction-btn" data-reaction="left">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M9 18l-6-6 6-6M3 12h18"/></svg>
+                                Girar izq.
+                            </button>
+                            <button class="us-reaction-btn" data-reaction="right">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M15 18l6-6-6-6M21 12H3"/></svg>
+                                Girar der.
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Alertas adicionales -->
+                    <div class="us-config-section">
+                        <h3 class="us-section-title">Alertas</h3>
+                        <label class="us-check-row">
+                            <input type="checkbox" id="usBuzzerAlert">
+                            <span class="us-check-box"></span>
+                            <span>Emitir sonido al detectar obstáculo</span>
+                        </label>
+                        <label class="us-check-row">
+                            <input type="checkbox" id="usDisplayAlert">
+                            <span class="us-check-box"></span>
+                            <span>Mostrar distancia en display</span>
+                        </label>
+                    </div>
+
+                    <!-- Test del sensor -->
+                    <div class="us-config-section">
+                        <h3 class="us-section-title">Test del sensor</h3>
+
+                        <!-- Estado y controles -->
+                        <div class="us-test-header">
+                            <div class="us-test-status" id="usTestStatus">
+                                <span class="us-test-dot" id="usTestDot"></span>
+                                <span id="usTestStatusText">Sin iniciar</span>
+                            </div>
+                            <div class="us-test-controls">
+                                <button class="us-test-start-btn" id="usTestStartBtn">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M8 5v14l11-7z"/></svg>
+                                    Iniciar
+                                </button>
+                                <button class="us-test-stop-btn" id="usTestStopBtn" disabled>
+                                    <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+                                    Detener
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Historial visual -->
+                        <div class="us-test-chart" id="usTestChart">
+                            <div class="us-chart-bars" id="usChartBars"></div>
+                            <div class="us-chart-labels">
+                                <span id="usChartMax">--</span>
+                                <span>cm</span>
+                                <span id="usChartMin">--</span>
+                            </div>
+                        </div>
+
+                        <!-- Estadísticas -->
+                        <div class="us-test-stats" id="usTestStats">
+                            <div class="us-stat-box">
+                                <span class="us-stat-label">Promedio</span>
+                                <span class="us-stat-value" id="usStatAvg">--</span>
+                                <span class="us-stat-unit">cm</span>
+                            </div>
+                            <div class="us-stat-box">
+                                <span class="us-stat-label">Mínimo</span>
+                                <span class="us-stat-value" id="usStatMin">--</span>
+                                <span class="us-stat-unit">cm</span>
+                            </div>
+                            <div class="us-stat-box">
+                                <span class="us-stat-label">Máximo</span>
+                                <span class="us-stat-value" id="usStatMax">--</span>
+                                <span class="us-stat-unit">cm</span>
+                            </div>
+                            <div class="us-stat-box">
+                                <span class="us-stat-label">Lecturas</span>
+                                <span class="us-stat-value" id="usStatCount">0</span>
+                                <span class="us-stat-unit">total</span>
+                            </div>
+                        </div>
+
+                        <!-- Calibración por distancia conocida -->
+                        <div class="us-calibrate-row">
+                            <span class="us-cal-label">Coloca un objeto a</span>
+                            <input type="number" class="us-cal-input" id="usCalInput" value="30" min="5" max="200">
+                            <span class="us-cal-label">cm y verifica:</span>
+                            <button class="us-cal-btn" id="usCalBtn">Verificar</button>
+                        </div>
+                        <div class="us-cal-result" id="usCalResult"></div>
+                    </div>
+
+                    <!-- Botón aplicar -->
+                    <button class="us-apply-btn" id="usApplyBtn">Aplicar configuración</button>
+                </div>
+            </div>
+
+            <!-- Calibrate Panel -->
+            <div class="content-panel" id="calibrate">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Calibración</h2>
+                    </div>
+                    <div class="calibrate-section">
+                        <div class="slider-container">
+                            <div class="slider-header">
+                                <span class="slider-label">Pierna Izq</span>
+                                <span class="slider-value" id="offsetLeftValue">0°</span>
+                            </div>
+                            <input type="range" class="custom-slider" id="offsetLeft" min="-90" max="90" value="0">
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-header">
+                                <span class="slider-label">Pierna Der</span>
+                                <span class="slider-value" id="offsetRightValue">0°</span>
+                            </div>
+                            <input type="range" class="custom-slider" id="offsetRight" min="-90" max="90" value="0">
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                            <button class="arm-btn" data-action="calibrate" data-cmd="apply-left">Aplicar Izq</button>
+                            <button class="arm-btn" data-action="calibrate" data-cmd="apply-right">Aplicar Der</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px;">
+                            <button class="arm-btn" data-action="calibrate" data-cmd="apply-both">Aplicar Ambos</button>
+                            <button class="arm-btn" data-action="calibrate" data-cmd="reset">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Debug Panel - Hidden to avoid interfering with main view -->
+            <!-- <div class="debug-panel" id="debugLog">
+                <div class="debug-header">System Log</div>
+            </div> -->
+        </main>
+    </div>
+
+    <!-- Lógica -->
+    <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
+    <script src="app.js"></script>
+    <script src="midi-import.js"></script>
+
+    <!-- Auto-recarga -->
+    <script>
+        // Auto-recargar cuando haya cambios
+        function initAutoReload() {
+            // No recargar en producción si se desea
+            // localStorage.setItem('no-auto-reload', 'true');
+
+            if (localStorage.getItem('no-auto-reload') === 'true') {
+                console.log('Auto-recarga desactivada');
+                return;
+            }
+
+            // Conectar al EventSource del servidor si existe
+            if (window.EventSource) {
+                const es = new EventSource('/es-reload');
+                es.onchange = () => location.reload();
+                console.log('Sistema de hot-reload activado');
+            }
+        }
+
+        // Iniciar al cargar
+        initAutoReload();
+    </script>
+</body>
+</html>

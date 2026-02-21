@@ -1,0 +1,8 @@
+ext.cordovaVariables = [:]
+ext.cordovaVariables.apply = { script ->
+    script.ext {
+        cdvMinSdkVersion = 24
+        cdvCompileSdkVersion = 34
+        cdvTargetSdkVersion = 34
+    }
+}
