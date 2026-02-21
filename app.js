@@ -17,7 +17,7 @@ const state = {
     selectedSounds: new Set(),
     maxSelectedSounds: 4,
     selectedDisplayMessages: new Set(),
-    maxSelectedDisplayMessages: 3,
+    maxSelectedDisplayMessages: 4,
     customMessages: [], // Array de mensajes personalizados
     customMelodies: {}, // Melodías MIDI importadas { 16: {name, notes}, 17: ... }
     savedBitmaps: [], // Array de bitmaps guardados { name, title, titleInvert, invert, data, preview }
