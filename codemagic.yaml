@@ -1,40 +1,39 @@
-# Referencia: https://docs.codemagic.io/yaml-basic-configuration/
-
 workflows:
-  default-workflow:
-    name: Otto Ninja Controller Android
-    max_build_duration: 30
-    instance_type: mac_mini_m1
+
+  # ─────────────────────────────────────────────────────────────
+  # WORKFLOW 1: APK de Debug  (sin firma, para pruebas)
+  # Se dispara en cada push a la rama main
+  # ─────────────────────────────────────────────────────────────
+  android-debug:
+    name: Otto Ninja - Android Debug APK
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+
+    environment:
+      node: 20.x
+      java: 17
+
     triggering:
       events:
         - push
       branch_patterns:
-        - pattern: master
+        - pattern: main
           include: true
-          source: true
-      tag_patterns:
-        - pattern: "*"
-          include: true
+
     scripts:
-      - name: Build Android APK
+      - name: Install Node dependencies
+        script: npm install
+
+      - name: Sync Capacitor assets to Android
+        script: npx cap sync android
+
+      - name: Set Gradle wrapper permissions
+        script: chmod +x android/gradlew
+
+      - name: Build Debug APK
         script: |
-          # Instalar dependencias
-          npm install
-
-          # Agregar plataforma Android si no existe
-          if [ ! -d "android" ]; then
-            npx cap add android
-          fi
-
-          # Sincronizar archivos web
-          npx cap sync android
-
-          # Dar permisos de ejecución a gradlew
-          chmod +x android/gradlew
-
-          # Compilar APK con Gradle
           cd android
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
 
     artifacts:
       - android/app/build/outputs/apk/debug/app-debug.apk
@@ -42,4 +41,69 @@ workflows:
     publishing:
       email:
         recipients:
-          - your-email@example.com
+          - $CM_SUBMITTER_EMAIL
+        notify:
+          success: true
+          failure: true
+
+
+  # ─────────────────────────────────────────────────────────────
+  # WORKFLOW 2: AAB de Release  (firmado, para Google Play)
+  # Se dispara al crear un tag tipo v1.0, v2.0, etc.
+  #
+  # Variables requeridas en Codemagic > App settings > Environment variables:
+  #   CM_KEYSTORE          → keystore en base64
+  #   CM_KEYSTORE_PASSWORD → contraseña del keystore
+  #   CM_KEY_ALIAS         → alias de la clave
+  #   CM_KEY_PASSWORD      → contraseña de la clave
+  # ─────────────────────────────────────────────────────────────
+  android-release:
+    name: Otto Ninja - Android Release AAB
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+
+    environment:
+      node: 20.x
+      java: 17
+      android_signing:
+        - otto_ninja_keystore
+      vars:
+        PACKAGE_NAME: com.ott.ninja.controller
+
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: "v*"
+          include: true
+
+    scripts:
+      - name: Install Node dependencies
+        script: npm install
+
+      - name: Sync Capacitor assets to Android
+        script: npx cap sync android
+
+      - name: Set Gradle wrapper permissions
+        script: chmod +x android/gradlew
+
+      - name: Build Release AAB
+        script: |
+          cd android
+          ./gradlew bundleRelease --no-daemon
+
+    artifacts:
+      - android/app/build/outputs/bundle/release/app-release.aab
+      - android/app/build/outputs/apk/release/app-release.apk
+
+    publishing:
+      email:
+        recipients:
+          - $CM_SUBMITTER_EMAIL
+        notify:
+          success: true
+          failure: true
+      # Descomenta cuando tengas Google Play configurado:
+      # google_play:
+      #   credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+      #   track: internal
