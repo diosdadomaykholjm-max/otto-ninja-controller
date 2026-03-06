@@ -33,11 +33,3 @@ workflows:
 
     artifacts:
       - android/app/build/outputs/apk/debug/app-debug.apk
-
-    publishing:
-      email:
-        recipients:
-          - $CM_SUBMITTER_EMAIL
-        notify:
-          success: true
-          failure: true
